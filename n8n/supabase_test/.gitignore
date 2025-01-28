@@ -1,0 +1,13 @@
+# Environments
+.env
+.venv
+env/
+venv
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Node
+nodesource_setup.sh
+node_modules
