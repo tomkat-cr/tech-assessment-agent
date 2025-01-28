@@ -1,0 +1,372 @@
+{
+  "name": "Technical Assessment Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "X-n8n-Signature",
+                "value": "EvtIS^EBVISeie6svB@6ev"
+              }
+            ]
+          }
+        }
+      },
+      "id": "c927cb3c-9c66-402d-b23c-d1ba6180aef3",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1860,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ee2bcd57-3b4c-43f9-b4b7-3a25687b9a68",
+              "name": "query",
+              "value": "={{ $json.body.query }}",
+              "type": "string"
+            },
+            {
+              "id": "63f23e51-af2b-47c4-a288-5abaf9b6c357",
+              "name": "user_id",
+              "value": "={{ $json.body.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b97a3670-8a87-481b-8695-db44624be7d8",
+              "name": "request_id",
+              "value": "={{ $json.body.request_id }}",
+              "type": "string"
+            },
+            {
+              "id": "7d3fa06d-08f7-4517-b9c5-3c46ff476f55",
+              "name": "session_id",
+              "value": "={{ $json.body.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "08eea7f5-c07f-4037-89dc-db29af8015dd",
+              "name": "files",
+              "value": "={{ $json.body.files }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3399a541-3c11-4617-b532-0320e2dab7a8",
+      "name": "Prep Input Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        920,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b5eaa2a2-a6bc-40ab-af5e-baa8a5dda1a7",
+              "name": "success",
+              "value": "=true",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "35e10897-cda9-45db-bad8-09324fa9dd93",
+      "name": "Prep Output Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1620,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "d9fec84b-86f0-4230-9fd4-c1cb392ff8b5",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "46a9e222-40c8-405f-8e0a-f71af50c5de0",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        660,
+        200
+      ],
+      "webhookId": "d9fec84b-86f0-4230-9fd4-c1cb392ff8b5",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Yl3wpAXkssiXJMra",
+          "name": "Header Auth acc for oTTomator"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Tech Assessment Agent Node\n\nAuthor: [Carlos J. Ramirez](https://www.carlosjramirez.com)\n\nThis is a n8n workflow for a Technical Assessment Agent that completing a Review Report based on provided whiteboard and behavioral interview for software engineers and developers.\n\nThe \"Agent\" node manages conversation history itself and is compatible with the oTTomator Live Agent Studio.\n\n## Core Components\n\n1. **Webhook Endpoint**\n   - Accepts POST requests with authentication\n   - Processes incoming queries with user and session information\n   - Provides secure communication via header authentication\n\n2. **Input Processing**\n   - Extracts key fields from incoming requests:\n     - query: The user's question or command\n     - user_id: Unique identifier for the user\n     - request_id: Request tracking ID\n     - session_id: Current session identifier\n\n3. **Database Integration**\n   - Uses Supabase for message storage\n   - Records both user messages and AI responses\n   - Maintains conversation history with metadata\n\n4. **Chat Model**\n   - Uses any [OpenRouter](https://openrouter.ai/models) model\n\n5. **Response Handling**\n   - Structured response format for consistency\n   - Includes success/failure status\n   - Returns formatted responses via webhook",
+        "height": 863,
+        "width": 590,
+        "color": 6
+      },
+      "id": "4c5afb90-7662-441d-a70a-396787ca9801",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": "=google/gemini-2.0-flash-exp:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        420
+      ],
+      "id": "d3fe9c48-f0d0-4a21-93c5-cf7bbedcc361",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "eIErrZztgzfBlA0y",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## OpenRouter as Chat Model\n**Add a Credential** using the endpoint: `https://openrouter.ai/api/v1` and your API Key.\n\n**Specify a model** check for the model name in the [Models](https://openrouter.ai/models) page, click on the model id, then double click on the `OpenAI Chat Model` node, click on `expression` and paste the model id.",
+        "height": 240,
+        "width": 360
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        840,
+        580
+      ],
+      "typeVersion": 1,
+      "id": "c6c23b7e-70db-4e7c-8f98-e87b3ecc9fb4",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Chat Memory with Supabase \n**Add a Credential**\n1. use the ` Transaction Pooler` instructions shown in the Supabase connection documentation for the database to be used with this workflow. \n2. Use the password specified when you created the Supabase account.\n\n\n**Configure the Key**: it must be the expression\n`{{ $json.session_id }}`",
+        "height": 240,
+        "width": 380
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1280,
+        580
+      ],
+      "typeVersion": 1,
+      "id": "63b4fa2d-001d-41f1-871a-f359a2653ece",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Auth Credentials\nTo Configure the **Authorization Bearer token**, the credential data should be:\n1. `Name` will be `Authorization`.\n2. `Value` will be `Bearer [token]`.\n\n\nFor more information, check [this](https://docs.n8n.io/integrations/builtin/credentials/httprequest) documentation.",
+        "height": 200,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        640,
+        360
+      ],
+      "typeVersion": 1,
+      "id": "39944bb5-00bd-4283-9497-c2fe2adee2bb",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Storing Messages in the Supabase Database\n1. Use this SQL to create the messages table:\n```sql\n-- Enable the pgcrypto extension for UUID generation\n-- Note: If you're using Supabase, the pgcrypto extension\n-- is already enabled by default.\nCREATE EXTENSION IF NOT EXISTS pgcrypto;\nCREATE TABLE messages (\n    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,\n    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,\n    session_id TEXT NOT NULL,\n    message JSONB NOT NULL\n);\nCREATE INDEX idx_messages_session_id ON messages(session_id);\nCREATE INDEX idx_messages_created_at ON messages(created_at);\n```\n2. Enable `realtime updates` for testing (with Agent 0) by running this SQL command:\n```sql\nalter publication supabase_realtime add table messages;\n```\n\nMore information on the [oTtomator Studio documentation](https://studio.ottomator.ai/guide)",
+        "height": 460,
+        "width": 720
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1720,
+        380
+      ],
+      "id": "77643fb5-e938-4c6d-b3f0-dcce4e6ae6ee",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.session_id }}",
+        "tableName": "messages"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        1300,
+        420
+      ],
+      "id": "676b7e9a-ecbf-44ea-86e6-4fd30bf044ab",
+      "name": "Supabase Chat Memory",
+      "notesInFlow": true,
+      "credentials": {
+        "postgres": {
+          "id": "tJC28WV8R06vKrKv",
+          "name": "Supabase stateless/pooler"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "github_url_retrieval_tool",
+        "description": "Call this tool to get the list of repositories with its descriptions from a Github user profile when the user specify a Github profile URL. The input should be a string with the Github profile url",
+        "source": "parameter",
+        "workflowJson": "\n\n{\n  \"name\": \"Github profile retrieval tool\",\n  \"nodes\": [\n    {\n      \"parameters\": {},\n      \"id\": \"4d7be2fb-d94a-49ff-b5a4-0c747778ce86\",\n      \"name\": \"Execute workflow\",\n      \"type\": \"n8n-nodes-base.manualTrigger\",\n      \"typeVersion\": 1,\n      \"position\": [\n        -20,\n        -120\n      ],\n      \"notesInFlow\": false,\n      \"notes\": \"E.g.\\n{\\n   \\\"query\\\": \\\"https://github.com/tomkat-cr\\\"\\n}\"\n    },\n    {\n      \"parameters\": {\n        \"assignments\": {\n          \"assignments\": [\n            {\n              \"id\": \"253c2b17-c749-4f0a-93e8-5ff74f1ce49b\",\n              \"name\": \"domain\",\n              \"value\": \"={{ $json.query }}\",\n              \"type\": \"string\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"id\": \"4778a967-9fa0-49ac-9283-d17feacaa019\",\n      \"name\": \"Set domain (URL)\",\n      \"type\": \"n8n-nodes-base.set\",\n      \"typeVersion\": 3.3,\n      \"position\": [\n        200,\n        0\n      ]\n    },\n    {\n      \"parameters\": {\n        \"language\": \"python\",\n        \"pythonCode\": \"\\\"\\\"\\\"\\nScrape a GitHub profile and get a list of repositories and their\\ndescriptions, using the requests and BeautifulSoup4 libraries.\\n\\n2025-01-22 | CR\\n\\nRequirements:\\n    pip install requests beautifulsoup4\\n\\\"\\\"\\\"\\nimport random\\nimport string\\n\\nDEBUG = True\\n\\n\\ndef log_debug(message):\\n    if DEBUG:\\n        print(message)\\n\\n\\ndef get_github_base_url(username) -> str:\\n    url = f\\\"https://github.com/{username}\\\"\\n    if username.startswith(\\\"https://github.com/\\\"):\\n        url = username\\n    # log_debug(f\\\"USERNAME: {username} | URL: {url}\\\")\\n    return url\\n\\n\\ndef get_html_element(soup, selector, value=None, attrs=None):\\n    try:\\n        if value is not None:\\n            element = soup.find(selector, value)\\n        elif attrs is not None:\\n            element = soup.find(selector, attrs=attrs)\\n        else:\\n            element = soup.find(selector)\\n        if element is None:\\n            return None\\n        return element.text.strip()\\n    except Exception as e:\\n        log_debug(f\\\"ERROR-GHE-10: {e}\\\")\\n        return None\\n\\n\\ndef scrape_github_profile_with_requests(username):\\n    \\\"\\\"\\\"\\n    Scrapes a GitHub profile to extract the main information\\n    (name, bio, company, location, website, social accounts, README).\\n\\n    Args:\\n        username (str): The GitHub username.\\n\\n    Returns:\\n        dict: A dictionary where keys are name, bio, company, location,\\n        website, social accounts, readme.\\n        Returns an empty dictionary if the profile is not found or an error\\n        occurs.\\n    \\\"\\\"\\\"\\n    try:\\n        url = get_github_base_url(username)\\n        response = requests.get(url)\\n        response.raise_for_status()  # Raise an exception for bad status codes\\n\\n    except requests.exceptions.RequestException as e:\\n        print(f\\\"ERROR-SGP-10: Request Error: {e}\\\")\\n        return {}\\n    except Exception as e:\\n        print(f\\\"ERROR-SGP-20: An error occurred: {e}\\\")\\n        return {}\\n\\n    log_debug(f\\\"\\\\nURL: {url} | Status Code: {response.status_code}\\\\n\\\")\\n    return scrape_github_profile(response.content, url)\\n\\n\\ndef scrape_github_profile(response_content, url=None, no_pii=False):\\n    \\\"\\\"\\\"\\n    Scrapes a GitHub profile to extract the main information\\n    (name, bio, company, location, website, social accounts, README).\\n\\n    Args:\\n        response_content (str): The GitHub profile html content.\\n\\n    Returns:\\n        dict: A dictionary where keys are name, bio, company, location,\\n        website, social accounts, readme.\\n        Returns an empty dictionary if the profile is not found or an error\\n        occurs.\\n    \\\"\\\"\\\"\\n    profile = {}\\n    try:\\n        # log_debug(f\\\"01-Response.content:\\\\n{response_content}\\\\n\\\\n\\\")\\n\\n        # Parse the HTML content\\n        soup = BeautifulSoup(response_content, 'html.parser')\\n\\n        # Get the main information\\n        name_element = soup.find('h1', {'class': \\\"vcard-names\\\"})\\n        name = get_html_element(\\n            name_element if name_element else soup,\\n            'span',\\n            attrs={'itemprop': \\\"name\\\"})\\n        nickname = get_html_element(\\n            name_element if name_element else soup,\\n            'span',\\n            attrs={'itemprop': \\\"additionalName\\\"})\\n        bio = get_html_element(\\n            soup if name_element else soup,\\n            'div',\\n            {\\n                'class': 'p-note user-profile-bio mb-3 js-user-profile-bio f4'\\n            })\\n        company = get_html_element(\\n            soup if name_element else soup,\\n            'li',\\n            attrs={'itemprop': \\\"worksFor\\\"})\\n        location = get_html_element(\\n            soup if name_element else soup,\\n            'li',\\n            attrs={'itemprop': \\\"homeLocation\\\"})\\n        website = get_html_element(soup, 'li', attrs={'itemprop': \\\"url\\\"})\\n        social_accounts = [\\n            {\\n                link.find('title').text.strip(): link.find('a')['href']\\n                if link.find('a') else None\\n            }\\n            for link in soup.find_all('li', attrs={'itemprop': 'social'})\\n        ]\\n        readme = get_html_element(soup, 'article', attrs={'itemprop': 'text'})\\n        # Log the scraped data\\n\\n        # Tokenize PII\\n        if no_pii:\\n            no_pii_name = nickname or \\\\\\n                ''.join(random.choices(string.ascii_letters +\\n                        string.digits, k=10))\\n            bio = bio.replace(name, no_pii_name)\\n            readme = readme.replace(name, no_pii_name)\\n        profile = {\\n            \\\"name\\\": no_pii_name if no_pii else name,\\n            \\\"nickname\\\": nickname,\\n            \\\"bio\\\": bio,\\n            \\\"company\\\": company,\\n            \\\"location\\\": location,\\n            \\\"website\\\": website,\\n            \\\"social_accounts\\\": social_accounts,\\n            \\\"readme\\\": readme,\\n            \\\"url\\\": url\\n        }\\n\\n    except Exception as e:\\n        print(f\\\"ERROR-SGP-30: An error occurred: {e}\\\")\\n        # raise\\n        return {}\\n\\n    return profile\\n\\n\\ndef scrape_github_repos_with_requests(username):\\n    \\\"\\\"\\\"\\n    Scrapes a GitHub profile to extract repository names and descriptions.\\n\\n    Args:\\n        username (str): The GitHub username.\\n\\n    Returns:\\n        dict: A dictionary where keys are repository names and values are\\n        their descriptions. Returns an empty dictionary if the profile is\\n        not found or an error occurs.\\n    \\\"\\\"\\\"\\n    base_url = get_github_base_url(username)\\n    try:\\n        url = f\\\"{base_url}?tab=repositories\\\"\\n        response = requests.get(url)\\n        response.raise_for_status()  # Raise an exception for bad status codes\\n\\n    except requests.exceptions.RequestException as e:\\n        print(f\\\"ERROR-SGR-10: Request Error: {e}\\\")\\n        return {}\\n    except Exception as e:\\n        print(f\\\"ERROR-SGR-20: An error occurred: {e}\\\")\\n        return {}\\n\\n    log_debug(f\\\"\\\\nURL: {url} | Status Code: {response.status_code}\\\\n\\\")\\n    return scrape_github_repos(response.content, base_url)\\n\\n\\ndef scrape_github_repos(response_content, url=None):\\n    \\\"\\\"\\\"\\n    Scrapes a GitHub profile to extract repository names and descriptions.\\n\\n    Args:\\n        response_content (str): The GitHub repos html content.\\n\\n    Returns:\\n        dict: A dictionary where keys are repository names and values are\\n        their descriptions. Returns an empty dictionary if the profile is\\n        not found or an error occurs.\\n    \\\"\\\"\\\"\\n    repos = {}\\n    try:\\n        # log_debug(f\\\"02-Response.content:\\\\n{response_content}\\\\n\\\\n\\\")\\n\\n        soup = BeautifulSoup(response_content, 'html.parser')\\n\\n        repo_list = soup.find_all(\\n            'li',\\n            class_='col-12 d-flex flex-justify-between width-full py-4'\\n                   ' border-bottom color-border-muted public source')\\n        for repo_item in repo_list:\\n            repo_name_element = repo_item.find('a', attrs={\\n                'itemprop': 'name codeRepository'})\\n            if repo_name_element:\\n                # Get repo name\\n                repo_name = repo_name_element.text.strip()\\n                # Get description\\n                description_element = repo_item.find(\\n                    'p',\\n                    attrs={'itemprop': \\\"description\\\"})\\n                if description_element:\\n                    description = description_element.text.strip()\\n                else:\\n                    description = 'No description available.'\\n                # Get topics\\n                topics = repo_item.find_all('a', attrs={\\n                    'data-octo-click': \\\"topic_click\\\"})\\n                topic_list = []\\n                for topic in topics:\\n                    topic_name = topic.text.strip()\\n                    topic_list.append(topic_name)\\n                # Build repo entry\\n                repos[repo_name] = {\\n                    'url': f\\\"{url}/{repo_name}\\\" if url else None,\\n                    'description': description,\\n                    'topics': topic_list\\n                }\\n\\n    except Exception as e:\\n        print(f\\\"ERROR-SGR-30: An error occurred: {e}\\\")\\n        return {}\\n\\n    return repos\\n\\n\\ndef print_github_profile_data(profile, repo_data):\\n    \\\"\\\"\\\"\\n    \\\"\\\"\\\"\\n    if profile:\\n        print(f\\\"Name: {profile['name']}\\\")\\n        print(f\\\"Nickname: {profile['nickname']}\\\")\\n        print(f\\\"Bio: {profile['bio']}\\\")\\n        print(f\\\"Company: {profile['company']}\\\")\\n        print(f\\\"Location: {profile['location']}\\\")\\n        print(f\\\"Website: {profile['website']}\\\")\\n        print(f\\\"Social Accounts: {profile['social_accounts']}\\\")\\n        print(f\\\"Readme: {profile['readme']}\\\\n\\\")\\n    else:\\n        print(\\\"Could not retrieve profile. Please check the username \\\" +\\n              \\\"and internet connection, or that the profile is public.\\\")\\n\\n    if repo_data:\\n        i = 0\\n        for repo_name, data in repo_data.items():\\n            i += 1\\n            print(f\\\"{i}) Repository: {repo_name}\\\")\\n            print(f\\\"URL: {data['url']}\\\")\\n            print(f\\\"Description: {data['description']}\\\")\\n            print(f\\\"Topics: {', '.join(data['topics'])}\\\\n\\\")\\n    else:\\n        print(\\\"Could not retrieve repositories. Please check the username \\\" +\\n              \\\"and internet connection, or that the profile has public repos.\\\")\\n\\n\\ndef print_github_profile_data_from_url(username):\\n    \\\"\\\"\\\"\\n    \\\"\\\"\\\"\\n    profile = scrape_github_profile(username)\\n    repo_data = scrape_github_repos(username)\\n    print_github_profile_data(profile, repo_data)\\n\\n\\ndef get_github_profile_data_from_html(profile_content, repos_content,\\n                                      domain, no_pii):\\n    \\\"\\\"\\\"\\n    \\\"\\\"\\\"\\n    profile = scrape_github_profile(profile_content, domain, no_pii)\\n    repo_data = scrape_github_repos(repos_content,\\n                                    f\\\"{domain}?tab=repositories\\\")\\n    return [{\\n        'profile': profile,\\n        'repos': repo_data\\n    }]\\n\\n\\nif __name__ == '__main__':\\n    import requests\\n    from bs4 import BeautifulSoup\\n    username = input(\\\"Enter github username: \\\")\\n    print_github_profile_data_from_url(username)\\nelse:\\n    # Run module directly\\n    log_debug('Importing micropip')\\n    import micropip\\n    log_debug('Installing dependencies: beautifulsoup4, requests')\\n    micropip.install('beautifulsoup4')\\n    from bs4 import BeautifulSoup\\n    items = _input.all()\\n    profile_content = items[0].get(\\\"json\\\", {}).get(\\\"profile_data\\\")\\n    repos_content = items[0].get(\\\"json\\\", {}).get(\\\"repos_data\\\")\\n    domain = items[0].get(\\\"json\\\", {}).get(\\\"domain\\\")\\n    log_debug(\\n        \\\"Input data from previous node:\\\"\\n        f\\\"\\\\n | domain: {domain}\\\"\\n        f\\\"\\\\n | profile_content: {profile_content}\\\"\\n        f\\\"\\\\n | repos_content: {repos_content}\\\"\\n    )\\n    return get_github_profile_data_from_html(\\n        profile_content, repos_content, domain, True)\\n\"\n      },\n      \"type\": \"n8n-nodes-base.code\",\n      \"typeVersion\": 2,\n      \"position\": [\n        1480,\n        0\n      ],\n      \"id\": \"619a0993-24c1-4852-bba5-065de9e1dc16\",\n      \"name\": \"Code\"\n    },\n    {\n      \"parameters\": {\n        \"url\": \"={{ $json.domain }}\",\n        \"options\": {}\n      },\n      \"id\": \"6526b662-3bb0-4a7b-9c8b-2612358b5bcb\",\n      \"name\": \"Get profile content (URL)\",\n      \"type\": \"n8n-nodes-base.httpRequest\",\n      \"typeVersion\": 4.2,\n      \"position\": [\n        640,\n        0\n      ]\n    },\n    {\n      \"parameters\": {\n        \"assignments\": {\n          \"assignments\": [\n            {\n              \"id\": \"560b18fd-7008-40d4-9392-1861ca08b214\",\n              \"name\": \"=profile_data\",\n              \"value\": \"={{ $json.data }}\",\n              \"type\": \"string\"\n            },\n            {\n              \"id\": \"0ac59e59-b6cb-40b1-bc37-43b6480b2e6c\",\n              \"name\": \"domain\",\n              \"value\": \"={{ $(\\\"Add protocol to domain\\\").item.json.domain }}\",\n              \"type\": \"string\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"id\": \"fc4256b3-5635-4164-bcc3-d748734870d6\",\n      \"name\": \"Store profile content data\",\n      \"type\": \"n8n-nodes-base.set\",\n      \"typeVersion\": 3.3,\n      \"position\": [\n        860,\n        0\n      ]\n    },\n    {\n      \"parameters\": {\n        \"url\": \"={{ $json.domain }}?tab=repositories\",\n        \"options\": {}\n      },\n      \"id\": \"524819f5-0825-44eb-92d6-6591e995708d\",\n      \"name\": \"Get repos content (URL)\",\n      \"type\": \"n8n-nodes-base.httpRequest\",\n      \"typeVersion\": 4.2,\n      \"position\": [\n        1080,\n        0\n      ]\n    },\n    {\n      \"parameters\": {\n        \"assignments\": {\n          \"assignments\": [\n            {\n              \"id\": \"ed0f1505-82b6-4393-a0d8-088055137ec9\",\n              \"name\": \"domain\",\n              \"value\": \"={{ $json.domain.startsWith(\\\"http\\\") ? $json.domain : \\\"http://\\\" + $json.domain }}\",\n              \"type\": \"string\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"id\": \"8ce5bd80-f3ff-491a-bc8c-adb40082f78f\",\n      \"name\": \"Add protocol to domain\",\n      \"type\": \"n8n-nodes-base.set\",\n      \"typeVersion\": 3.3,\n      \"position\": [\n        420,\n        0\n      ]\n    },\n    {\n      \"parameters\": {\n        \"assignments\": {\n          \"assignments\": [\n            {\n              \"id\": \"560b18fd-7008-40d4-9392-1861ca08b214\",\n              \"name\": \"=repos_data\",\n              \"value\": \"={{ $json.data }}\",\n              \"type\": \"string\"\n            },\n            {\n              \"id\": \"d34b09d2-5d99-4cd0-a4fc-d5847ed40c04\",\n              \"name\": \"profile_data\",\n              \"value\": \"={{ $('Store profile content data').item.json.profile_data }})\",\n              \"type\": \"string\"\n            },\n            {\n              \"id\": \"0ac59e59-b6cb-40b1-bc37-43b6480b2e6c\",\n              \"name\": \"domain\",\n              \"value\": \"={{ $(\\\"Add protocol to domain\\\").item.json.domain }}\",\n              \"type\": \"string\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"id\": \"307cfc6b-654e-4c00-875d-18f4fd9bf15f\",\n      \"name\": \"Store profile and repos content\",\n      \"type\": \"n8n-nodes-base.set\",\n      \"typeVersion\": 3.3,\n      \"position\": [\n        1280,\n        0\n      ]\n    },\n    {\n      \"parameters\": {\n        \"assignments\": {\n          \"assignments\": [\n            {\n              \"id\": \"53c1c016-7983-4eba-a91d-da2a0523d805\",\n              \"name\": \"response\",\n              \"value\": \"={{ JSON.stringify($json) }}\",\n              \"type\": \"string\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"id\": \"d79641fa-de9c-45b1-95e1-5e8b04e874dd\",\n      \"name\": \"Set response (URL)\",\n      \"type\": \"n8n-nodes-base.set\",\n      \"typeVersion\": 3.3,\n      \"position\": [\n        1660,\n        0\n      ]\n    },\n    {\n      \"parameters\": {\n        \"assignments\": {\n          \"assignments\": [\n            {\n              \"id\": \"a3a89995-6b52-4bfa-8c7d-4a399551af26\",\n              \"name\": \"query\",\n              \"value\": \"https://github.com/tomkat-cr\",\n              \"type\": \"string\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.set\",\n      \"typeVersion\": 3.4,\n      \"position\": [\n        -20,\n        120\n      ],\n      \"id\": \"2fa0d69a-138e-4943-b0ef-1ac52a9faf90\",\n      \"name\": \"Mocked input\"\n    }\n  ],\n  \"pinData\": {},\n  \"connections\": {\n    \"Execute workflow\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Set domain (URL)\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Set domain (URL)\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Add protocol to domain\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Get profile content (URL)\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Store profile content data\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Store profile content data\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Get repos content (URL)\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Add protocol to domain\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Get profile content (URL)\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Get repos content (URL)\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Store profile and repos content\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Store profile and repos content\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Code\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Code\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Set response (URL)\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Mocked input\": {\n      \"main\": [\n        []\n      ]\n    }\n  },\n  \"active\": false,\n  \"settings\": {\n    \"executionOrder\": \"v1\"\n  },\n  \"versionId\": \"44a45f51-05f2-4699-8cbf-d9fe03bbd11d\",\n  \"meta\": {\n    \"templateCredsSetupCompleted\": true,\n    \"instanceId\": \"1292ad95d22a648fb1392f43632414640ef16431c824dbbeb0e0a5deef6365cc\"\n  },\n  \"id\": \"IX0VfDW4POrP20tj\",\n  \"tags\": []\n}\n\n\n\n\n\n\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        420
+      ],
+      "id": "aa6e3bed-1ece-40ae-806c-f3be24b6d3ef",
+      "name": "Call n8n Workflow Tool"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{$('Prep Input Fields').item.json.query}}",
+        "options": {
+          "systemMessage": "As a professional Human Resources advisor and writer, assist in completing a Technical Review Report based on provided notes from a Technical Assessment Whiteboard and Behavioral interview.\n\n# Welcome message\n\nIf the user doesn't provide the notes, or say hi, respond with a welcome message. For example:\n\n```\nHello, I'm ready to assist you with the Technical Review Report. Please provide the notes from the technical review so I can get started.\nTips:\n- I handle technical assesment for software engineers and developers.\n- If you need a template for the interview notes, ask me: **give me the notes template**.\n- If you need the interview types, ask me: **give me the interview goals**.\n- If you want to know the default seniority levels I use, ask me: **give me the seniority levels**.\n```\n\n# Interview goals\n\nThe interview goals (or interview types) here are:\n\n1) Colleague technical assessment meeting: the idea is to evaluate his/her current state and seniority level, leadership skills, what would be the next seniority level and career path. The candidate is evaluated by a colleague, who will provide feedback on the candidate's technical skills, experience, and potential for growth to HR.\n\n2) Employee prospect interview: act as a filter, helping HR to identify candidates with the right technical knowledge, skills and role fit before the coding test and the final interviw with the target project team.\n\n# Reasoning\n\nSolve by breaking the problem into steps. Before giving the final presentation, review the report and ensure it has enough details to make it practical for a HR technical assessment, alowing to know the candidate's current state and seniority level, leadership skills, what would be the next seniority level and career path. Review the provided notes, compare it with the report and think again. If it's necessary, ask the user for additional information, for example previous projects or roles, soft skills, education, github profile for technical roles, etc. Finally ask yourself: \"is this report going to be useful to me as a HR advisor?\".\n\n# Steps\n\n1. **Review the notes**: Review the provided notes and if it's necessary, ask the user for additional information for the mandatory items and the first reponse line must have the text `[[Question]]`. It's important (but not mandatory) to have information about experience (previous projects and/or roles), education, current seniority level, technologies, (e.g. programming languages, frameworks, databases, tools, cloud providers, and any other aspect of interest), soft skills, english level, technical challenges and how hi/her has done them, comunication and collaboration examples, how to explain complex concepts to non-technical people, adaptability and continuous learning, leadership and mentoring skills, team Leadership, approach to ensuring security and quality in software development, future carrer plan, github profile, etc.\n2. **Experience**: Summarize the candidate's professional experience from the notes.\n3. **Knowledge Check Interview**: Based on the notes, compile a detailed summary of the candidate's proficiency with various technologies, including programming languages, frameworks, databases, tools, cloud providers, and any other aspect of interest.\n4. **Leadership and Seniority**: Identify and summarize the candidate's leadership skills and level of seniority, incorporating their experience and soft skills.\n5. **Github profile**: If the user provides the Github profile, a Code Tool is available to get a summary of the projects, and that can be used to know more about the candidate's technical skills, self-improved experience and proficiency.\n6. **HR Summary**: Complete a summary by rating each category on a scale from 1 to 5 and interpreting the score based on quality descriptions provided in the rubric.\n7. **Conclusion**: Develop general statements about the candidate’s performance and suitability.\n8. **Recommendations**: Offer technology, soft skills, career path and leadership related recommendations based on the candidate's review notes.\n\n# Seniority levels\n\n---\n\n1. Trainee\n2. Professional entry\n3. Practitioner\n4. Sr. Practitioner\n5. Tecnical Lead\n\n## Trainee\n\nDescribes people who are just starting out in their field or company. At this level, their focus is on gaining expertise and learning how the project operates from more advanced people. The team oversees their work and provides mentorship.\n\nAlso:\n- First job.\n- Operational role.\n- First time working in tech industry.\n- Requires direct and detailed instruction and guidance from the team.\n- Expected to just follow instructions.\n- Low responsibility, and low risk.\n- High dependence.\n- Low-level implementation.\n- All work needs to be supervised.\n- Needs guidance for learning.\n- Understands basic concepts.\n- Unable to lead a team, nor be the only person with their role in the team.\n\nLow impact in case of turnover.\nAvg. time at this stage: From 6 months to 2 years.\n\n## Professional entry\n\nDescribes people who are a little more advanced in their careers, and who have gained some independence when solving low-complexity tasks.\nHowever, they still need guidance from more experienced team members.\n\nAlso:\n- Must work within a team, joined by other people with more experience in the same discipline.\n- High dependence in conversations with the client.\n- Can take some responsibilities on their own, still closely supported by the team.\n- Their work must be reviewed on a frequent (usually daily) basis.\n- May make suggestions of improvement on processes or tasks.\n- Can perform simple analysis.\n- May manage small internal projects.\n- Cannot lead a team, nor be the only person with their role in the team.\n- Can learn on their own; knows where to find resources to improve/correct mistakes.\n- Can explain/justify their work to others.\n\nLow to mid impact in case of turnover.\nAvg. time at this stage: From 2 to 4 years.\n\n## Practitioner\n\nMay be the longest period the average person invests in the development of their career. People at this level are mature professionals and are able to work with minimal supervision alongside multi-disciplinary teams.\n\nAlso:\n- Mid seniority in a technology or specific knowledge field.\n- Minimal to no revision from higher-experienced people.\n- May share responsibility of small teams.\n- Is able to help train new team members at the trainee level.\n- Helps teammates to grow.\n- They go beyond expectations.\n- Shows strong lifelong learning competency performance.\n- Is able to work directly with the client.\n- Fully independent when communicating with the client.\n- Autonomous and a clear value addition to the project.\n- Can make decisions regarding their own work.\n- Can diagnose problems / propose (not dictate) solutions.\n- Build features or execute projects alongside a team, implementing specifications of others.\n- Still have to work on leadership competencies in order to lead a team.\n- Result Oriented.\n\nMid impact in case of turnover.\nAvg. time at this stage: From 4 to 8 years\n\n## Sr. Practitioner\n\nPeople at this stage can choose two different paths. They can either focus on high-tech knowledge, or specialize in team leadership. Sr. practitioners that commit to high-tech knowledge are those whose motivation is driven by challenges in the technical field. They tend to specialize and go deeper when developing tech competencies. On the other hand, Sr. practitioners dedicated to leadership roles will develop management competencies such as communication, coordination, negotiation/conflict management, among others. They focus on team success.\n\nAlso:\n- High level in soft competencies.\n- High level in self-starter & long-learning competencies.\n- High performance with a group of technologies.\n- Adds high value to complex discussions whether related to tech issues, products, or team structure.\n- Teamwork mindset and great at working independently.\n- A key member of the team / Highly trusted team member.\n- Experience working in an agile environment.\n- Can work with no peer supervision / Can review others’ work.\n- Can mentor, teach, coach, or guide others.\n- Can lead a team and make decisions over others’ work.\n- Can address complex problems, architect, and strategize.\n- Can improve processes, design solutions, and experiments.\n- Can define policies and best practices, and elaborate guidelines and manuals.\n- Total independence in the client relationship at a high complexity level.\n\nHigh impact in case of turnover.\nAvg. time at this stage: From 6 to 10 years\n\n## Tecnical Lead\n\nLet’s ask a question here … is it the end? It’s all over now? The answer is OF COURSE NOT. The reason for having this level “defined” is to inspire and motivate you to keep growing in your career, and to be aware that there’s more out there. Professional development has no limit. You can always find a way to succeed and grow. However, it’s always helpful to have an idea of how top-team players look like at our company. They are role models of ownership of the project, client, and company.\n\nAlso:\n- Can advise top decision makers.\n- Can lead a large, multi-layered team.\n- Can elaborate company-wide strategies, long-term, complex plans, global doctrines.\n- Go beyond projects and the team needs to add value to the company's growth.\n- The one to go to in emergency situations.\n- Have initiative for starting training programs, personally take charge of others' training.\n- Shows knowledge in a wide variety of tech fields.\n- Makes decisions with the client / for the client.\n- The client relies on this person.\n- Represents the company and the client.\n- Deals with the client directly.\n- No supervision running the project/ team/ client.\n\nHigh impact in case of turnover.\nAvg. time at this stage: From 10 years until you decide.\n\n---\n\n# Input Format\n\nThe input will be a series of notes from a technical review, with the following structure:\n\n---\n\n## General data\n\n- Interview goal: [optional]\n(colleague technical assessment -by default if not specified- or employee prospect interview).\n\n- Interview date: [mandatory]\n\n- Candidate alias: [mandatory]\n(use \"Alias [interview date]\" if not specified otherwise).\n\n- Age: [optional]\n\n- Gender: [mandatory]\n(male, female, other).\n\n- Years of experience: [mandatory]\n\n- Time in the current company: [mandatory]\n- Project you are currently working on: [mandatory]\n- Current role: [mandatory]\n\n- Current seniority: [optional]\n(options: Don't know, Trainee, Professional entry, Practitioner, Sr. Practitioner, Tecnical Lead)\n\n- Other projects in the current company: [optional]\n\n## Portfolio\n\n- Github profile username: [optional]\n\n## Education\n\n- Give me a summary of your education (can be a copy and paste of the LinkedIn Education section): [optional]\n\n## Experience\n\n- Give me a summary of your professional experience (can be a copy and paste of the LinkedIn Experience section): [mandatory]\n\n## General technical knowledge\n\n- What are your most outstanding technical skills?\n\n  - Programming languages: [mandatory]\n  - Frameworks: [mandatory]\n  - Cloud providers: [mandatory]\n  - Database: [mandatory]\n  - Development tools: [mandatory]\n  - AI: [optional]\n  - ML: [optional]\n  - Other: [optional]\n\n- Tell me about your experience with specific tools and how you have applied them in previous projects: [optional]\n\n## Problem Solving\n\n- Give me an example of a technical challenge you faced and how you overcame it: [mandatory]\n\n- How do you identify and fix bugs in the code?: [optional]\n\n## Collaboration and communication\n\n- Can you share a situation where you worked as a team to solve a technical problem?: [mandatory]\n\n- Describe how you would explain a complex technical concept to someone with no technical experience: [optional]\n\n## Adaptability and continuous learning\n\n- How do you keep up with the latest trends in your technical field? [optional]\n\n- Provide an example of a project where you quickly learned a new technology: [optional]\n\n## Previous projects\n\n- What was your most outstanding contribution to a project from a technical point of view?: [mandatory]\n\n- How do you manage tight deadlines and changing priorities in a technical project? [optional]\n\n## Challenge situations\n\n- Share a situation where you encountered a major problem in a project and how you handled it: [mandatory]\n\n- How do you handle pressure and stress in a technical environment? [optional]\n\n## Development and continuous improvement\n\n- How are you constantly looking to improve your technical skills? [optional]\n\n- Have you implemented significant improvements in development processes in previous teams? [optional]\n\n## Team Leadership\n\n- Have you had teams of people in your charge? [mandatory]\n\n- What was or is your role managing teams of people? [optional]\n\n- How many people were in your charge and what were their roles? [optional]\n\n- How long did you hold that role? [optional]\n\n## Safety and quality\n\n- What is your approach to ensuring security and quality in software development? [optional]\n\n- Provide examples of safety and quality practices that you have implemented in previous projects. [optional]\n\n## Soft Skills\n\n- Most outstanding soft skills: [mandatory]\n\n## English\n\n- English level (A1, A2, B1, B2, C1, C2): [mandatory]\n- Do you have experience working with international teams? [optional]\n- Have you worked with English-speaking clients directly? [optional]\n\n## Future:\n\n- What would you like to achieve in the coming year? [mandatory]\n\n- What would you like to improve? [mandatory]\n\n- What would you like to learn? [mandatory]\n\n## Questions asked by the candidate\n\n- What questions do you have for us? [optional]\n\n---\n\n# Output Format\n\nWhen you've gathered all the data required, the reasoning process have been finished and have the final report, provide the completed technical review report in the following structured format:\n\n[[Final Technical Review Report]]\n\nInterview Goal: [Interview goal]\nDate: [Interview date]\n\nCandidate: [Candidate alias]\nCurrent Project: [Current project]\nCurrent Role: [Current role]\n\nCurrent Seniority: [Current seniority]\nNext Seniority Level: [Next seniority level]\n\n1. **Experience**\n   - Summary: [Candidate’s experience summary]\n\n2. **Knowledge Check Interview**\n   - Technologies Summary: [Details about proficiency in technologies]\n\n3. **Leadership and Seniority**\n   - Summary: [Leadership and seniority skills]\n\n4. **HR Summary**\n   - Experience Rating: [Description and Score]\n   - Conceptual Basis Rating: [Description and Score]\n   - Seniority Skills Rating: [Description and Score]\n   - Soft Skills Rating: [Description and Score]\n\n5. **Conclusion - Generalities**\n   - [General conclusion about the candidate]\n\n6. **Tech Recommendations**\n   - [Recommended technologies or actions based on the review]\n\n# Examples\n\n### Example\n\n- **Experience**:\n  - Summary: [The candidate has 5 years of experience in software development, specializing in frontend technologies like React and Angular.]\n\n- **Knowledge Check Interview**:\n  - Technologies Summary: [The candidate demonstrated proficiency in JavaScript, with a strong understanding of React and Node.js, and familiarity with AWS cloud services. They have experience with SQL databases liker MySQL and PostgreSQL. They was able to explain the concepts of RESTful APIs and microservices architecture in a way that non-technical person can understand. They use software design patterns in current and previous projects.]\n\n- **Leadership and Seniority**:\n  - Summary: [The candidate has led small development teams and displays strong mentorship skills, showcasing potential for senior roles. They does not have direct contact with english-spoken clients and needs to improve his english practice.]\n\n- **HR Summary**:\n  - Experience Rating: 5-year experience | 5 (Excellent)\n  - Conceptual Basis Rating: understand and use design pattenrs and good software development practices | 4 (Outstanding)\n  - Seniority Skills Rating: senior level, proactive | 5 (Excellent)\n  - Soft Skills Rating: collaboration, mentoring, english level A | 3 (Good)\n\n- **Conclusion - Generalities**:\n  - [The candidate is an exceptional fit for senior development roles, capable of leading projects and mentoring junior developers.]\n\n- **Tech Recommendations**:\n  - [Encourage specialization in AWS services and further development in backend technologies like Node.js.]\n  - [Improve English skills to facilitate communication with international clients.]\n\n# Notes\n\n- Ensure each section is filled out in accordance with the notes provided.\n- Consider contextual evidence from the notes when evaluating and scoring.\n- Adjust wording to align with professional HR and technical standard language.\n- The first user message provides the notes from a technical review. Use these notes to complete the technical review report.\n"
+        }
+      },
+      "id": "2395dc1d-0847-4466-87ad-4332713808b1",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1200,
+        200
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Prep Output Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep Input Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prep Input Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call n8n Workflow Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Prep Output Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "7133dac8-18ea-4e50-a45f-4a2d75a99458",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1292ad95d22a648fb1392f43632414640ef16431c824dbbeb0e0a5deef6365cc"
+  },
+  "id": "X8BOgTQd4ISkXuhK",
+  "tags": [
+    {
+      "createdAt": "2025-01-16T13:51:15.908Z",
+      "updatedAt": "2025-01-16T13:51:15.908Z",
+      "id": "i6Iie3yNMkSGxWSI",
+      "name": "studio-test"
+    }
+  ]
+}
