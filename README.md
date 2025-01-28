@@ -1,12 +1,12 @@
-# Tech Assessment Agent Node
-
-Technical Assessment Agent for the oTTomator Live Agent Studio
+# Tech Assessment Agent
 
 Author: [Carlos J. Ramirez](https://www.carlosjramirez.com)
 
-This is a n8n workflow for a Technical Assessment Agent that completing a Review Report based on provided whiteboard and behavioral interview for software engineers and developers.
+Technical Assessment Agent for the oTTomator Live Agent Studio.
 
-The "Agent" node manages conversation history itself and is compatible with the oTTomator Live Agent Studio.
+It consists of a [n8n](https://n8n.io/) workflow with a Technical Assessment Agent that completing a Review Report based on provided whiteboard and behavioral type interview notes, suitable for software engineers and developers.
+
+The "Agent" node manages conversation history itself and is compatible with the [oTTomator Live Agent Studio](https://studio.ottomator.ai).
 
 ## Core Components
 
@@ -39,7 +39,7 @@ The "Agent" node manages conversation history itself and is compatible with the 
 
 To make the workflow to be executed in the [oTTomator Live Agent Studio](https://studio.ottomator.ai), follow these steps:
 
-1. In the **n8n** UI, create a Workflow.
+1. In the `n8n` UI, create a Workflow.
 
 2. Import the Workflow JSON file: [Technical_Assessment_Agent.json](n8n/workflow/Technical_Assessment_Agent.json).
 
@@ -49,7 +49,7 @@ To make the workflow to be executed in the [oTTomator Live Agent Studio](https:/
 
 5. Go to [Agent 0](https://studio.ottomator.ai/agent/0).
 
-6. Click on the **Gear** icon.
+6. Click on the `Gear` icon.
 
 7. Set the required data in the `Agent Zero Configuration` section:
 
@@ -64,10 +64,11 @@ To make the workflow to be executed in the [oTTomator Live Agent Studio](https:/
 
 ## Auth Credentials and other configurations
 
-1. To Configure the Webhook Endpoint **Authorization Bearer token**, the credential data should be:<br/><br/>
+1. To Configure the Webhook Endpoint **Authorization Bearer token**, the credential data should be:<br/>
     * `Name` will be `Authorization`.
     * `Value` will be `Bearer [token]`.<br/><br/>
-    For more information, check [this](https://docs.n8n.io/integrations/builtin/credentials/httprequest) documentation.
+    For more information, check [this](https://docs.n8n.io/integrations/builtin/credentials/httprequest) documentation.<br/>
+    You can select any value of your choice for the `[token]`.
 
 2. OpenRouter as Chat Model
 
@@ -78,17 +79,18 @@ To make the workflow to be executed in the [oTTomator Live Agent Studio](https:/
 3. Chat Memory with Supabase 
 
     * **Add a Credential**
-    
-    1. use the ` Transaction Pooler` instructions shown in the Supabase connection documentation for the database to be used with this workflow. 
+
+    1. use the `Transaction Pooler` instructions shown in the Supabase connection documentation for the database to be used with this workflow. 
     
     2. Use the password specified when you created the Supabase account.
 
     * **Configure the Key**: it must be the expression
 `{{ $json.session_id }}`
 
-4. ## Storing Messages in the Supabase Database
+4. Storing Messages in the Supabase Database
 
-    1. Use this SQL to create the messages table:
+    * Use this SQL to create the messages table:
+
 ```sql
 -- Enable the pgcrypto extension for UUID generation
 -- Note: If you're using Supabase, the pgcrypto extension
@@ -102,22 +104,25 @@ CREATE TABLE messages (
 );
 CREATE INDEX idx_messages_session_id ON messages(session_id);
 CREATE INDEX idx_messages_created_at ON messages(created_at);
+```
 
-    2. Enable `realtime updates` for testing (with Agent 0) by running this SQL command:
+    * Enable `realtime updates` for testing (with Agent 0) by running this SQL command:
+
 ```sql
 alter publication supabase_realtime add table messages;
 ```
-More information on the [oTtomator Studio documentation](https://studio.ottomator.ai/guide)
+
+Find more information about the database integration on the [oTtomator Studio documentation](https://studio.ottomator.ai/guide)
 
 ## Chat with Agent 0
 
 Click on **New Conversation** in the **Agent 0** UI.
 
-If you need a template for the interview notes, ask: **give me the notes template**.
+If you need a template for the interview notes, ask: **give me the notes template**
 
-If you need the interview types, ask: **give me the interview goals**.
+If you need to know the interview types, ask: **give me the interview goals**
 
-If you want to know the default seniority levels, ask: **give me the seniority levels**.
+If you want to know the default seniority levels, ask: **give me the seniority levels**
 
 When you are ready with all the required information, provide the notes from the technical review.
 
