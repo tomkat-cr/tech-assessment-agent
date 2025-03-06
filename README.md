@@ -37,11 +37,39 @@ The "Agent" node manages conversation history itself and is compatible with the 
 
 ## Usage
 
-To make the workflow to be executed in the [oTTomator Live Agent Studio](https://studio.ottomator.ai), follow these steps:
+### Native n8n chat interface
 
-1. In the `n8n` UI, create a Workflow.
+1. In the `n8n` UI, create a Workflow. Name it `Technical Assessment Agent (n8n)`.
 
-2. Import the Workflow JSON file: [Technical_Assessment_Agent.json](n8n/workflow/Technical_Assessment_Agent.json).
+2. Import the Workflow JSON file: [Technical_Assessment_Agent_n8n.json](n8n/workflow/Technical_Assessment_Agent_n8n.json).
+
+3. Set the required credentials and other configurations in the Workflow (more information in the [Auth Credentials and other configurations](#auth-credentials-and-other-configurations) section).
+
+4. Start the n8n server.
+
+```bash
+make run
+```
+
+5. Make sure the workflow is running.
+
+    - Go to `n8n UI > Home > Technical Assessment Agent (n8n)`.
+
+6. Get the Webhook Endpoint.
+
+    - Go to `n8n UI > Home > Technical Assessment Agent (n8n) > When chat message received > Chat URL`.
+    - Copy the URL.
+
+7. Chat with the agent.
+
+    - Paste the Chat URL in a new tab.
+    - Chat with the agent following the instructions in the section [Chat with the Technical Assessment Agent](#chat-with-the-technical-assessment-agent).
+
+### oTTomator Live Agent Studio
+
+1. In the `n8n` UI, create a Workflow. Name it `Technical Assessment Agent (oTTomator)`.
+
+2. Import the Workflow JSON file: [Technical_Assessment_Agent_ottomator.json](n8n/workflow/Technical_Assessment_Agent_ottomator.json).
 
 3. Set the required credentials and other configurations in the Workflow (more information in the [Auth Credentials and other configurations](#auth-credentials-and-other-configurations) section).
 
@@ -60,7 +88,10 @@ To make the workflow to be executed in the [oTTomator Live Agent Studio](https:/
 
 8. Click on the **Save** button.
 
-9. Test the workflow by following the section [Chat with Agent 0](#chat-with-agent-0) instructions.
+9. Chat with Agent 0:
+
+    - Click on **New Conversation** in the **Agent 0** UI.
+    - Chat with the agent following the instructions in the section [Chat with the Technical Assessment Agent](#chat-with-the-technical-assessment-agent).
 
 ## Auth Credentials and other configurations
 
@@ -114,9 +145,7 @@ alter publication supabase_realtime add table messages;
 
 Find more information about the database integration on the [oTtomator Studio documentation](https://studio.ottomator.ai/guide)
 
-## Chat with Agent 0
-
-Click on **New Conversation** in the **Agent 0** UI.
+## Chat with the Technical Assessment Agent
 
 If you need a template for the interview notes, ask: **give me the notes template**
 
