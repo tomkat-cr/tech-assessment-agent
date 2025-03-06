@@ -2,11 +2,14 @@
 
 Author: [Carlos J. Ramirez](https://www.carlosjramirez.com)
 
-Technical Assessment Agent for the oTTomator Live Agent Studio.
+Tech Assessment Agent based on AI.
 
-It consists of a [n8n](https://n8n.io/) workflow with a Technical Assessment Agent that completing a Review Report based on provided whiteboard and behavioral type interview notes, suitable for software engineers and developers.
+It consists of [n8n](https://n8n.io/) workflows with a Technical Assessment Agent that completing a Review Report based on provided whiteboard and behavioral type interview notes, suitable for software engineers and developers.
 
-The "Agent" node manages conversation history itself and is compatible with the [oTTomator Live Agent Studio](https://studio.ottomator.ai).
+The "Agent" node manages conversation history itself and can be used with the Chat interface of:
+
+* [n8n](https://n8n.io/)
+* [oTTomator Live Agent Studio](https://studio.ottomator.ai)
 
 ## Core Components
 
