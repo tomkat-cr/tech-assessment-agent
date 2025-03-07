@@ -90,7 +90,7 @@ You can use a local server or cloud server:
 
 3. Set the required credentials and other configurations in the Workflow (more information in the [Auth Credentials and other configurations](#auth-credentials-and-other-configurations) section).
 
-4. Sign in to the [oTTomator Studio](https://studio.ottomator.ai).
+4. Sign in to the [oTTomator Live Agent Studio](https://studio.ottomator.ai).
 
 5. Go to [Agent 0](https://studio.ottomator.ai/agent/0).
 
@@ -133,7 +133,7 @@ You can use a local server or cloud server:
 
     * **Specify a model** check for the model name in the [Models](https://openrouter.ai/models) page, click on the model id, then double click on the `OpenAI Chat Model` node, click on `expression` and paste the model id.
 
-4. Chat Memory with Supabase 
+3. Chat Memory with Supabase 
 
     * **Add a Credential**
 
@@ -148,7 +148,7 @@ You can use a local server or cloud server:
 
     * For n8n: it will create the table automatically.
 
-    * For oTtomator Studio: use this SQL to create the messages table:
+    * For oTTomator Live Agent Studio: use this SQL to create the messages table:
 
 ```sql
 -- Enable the pgcrypto extension for UUID generation
@@ -172,7 +172,7 @@ CREATE INDEX idx_messages_created_at ON messages(created_at);
 alter publication supabase_realtime add table messages;
 ```
 
-Find more information about the database integration on the [oTtomator Studio documentation](https://studio.ottomator.ai/guide)
+Find more information about the database integration on the [oTTomator Live Agent Studio documentation](https://studio.ottomator.ai/guide)
 
 ## System prompt
 
