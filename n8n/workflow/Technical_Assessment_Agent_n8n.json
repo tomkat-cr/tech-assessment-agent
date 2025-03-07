@@ -29,27 +29,21 @@
         "assignments": {
           "assignments": [
             {
-              "id": "ee2bcd57-3b4c-43f9-b4b7-3a25687b9a68",
-              "name": "query",
-              "value": "={{ $json.body.query }}",
-              "type": "string"
-            },
-            {
-              "id": "63f23e51-af2b-47c4-a288-5abaf9b6c357",
-              "name": "user_id",
-              "value": "={{ $json.body.user_id }}",
-              "type": "string"
-            },
-            {
-              "id": "b97a3670-8a87-481b-8695-db44624be7d8",
-              "name": "request_id",
-              "value": "={{ $json.body.request_id }}",
-              "type": "string"
-            },
-            {
               "id": "7d3fa06d-08f7-4517-b9c5-3c46ff476f55",
-              "name": "session_id",
-              "value": "={{ $json.body.session_id }}",
+              "name": "sessionId",
+              "value": "={{ $json.body.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "b7e5b999-9769-47dc-923e-36113eebd2db",
+              "name": "action",
+              "value": "={{ $json.body.action }}",
+              "type": "string"
+            },
+            {
+              "id": "ee2bcd57-3b4c-43f9-b4b7-3a25687b9a68",
+              "name": "chatInput",
+              "value": "={{ $json.body.chatInput }}",
               "type": "string"
             },
             {
@@ -285,7 +279,7 @@
       "parameters": {
         "public": true,
         "authentication": "basicAuth",
-        "initialMessages": "Hi there! 👋\nMy name is Tea-A, your Tech Assessment Agent. How can I assist you today?",
+        "initialMessages": "Hi there! 👋\nI'm your Tech Assessment Agent. How can I assist you today?",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
@@ -304,6 +298,21 @@
           "name": "Tech Assessment chat credential"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## Chat Credentials\nTo configure credential for the chat interface:\n1. Double click on the `When chat message received` node.\n2. In the `Authentication` section, the `Basic Auth` option should be selected.\n3. Click on the `Credential for Basic Auth` field, then select the `Create new credential` or select a existing credential (and click on the `pencil` icon to edit it).\n4. Provide the credentials to be used when you want to run the chat interface in the `User` and `Password` fields.\n5. Click on the `Save` button.\n\n\nFor more information, check [this](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-langchain.chattrigger/) documentation.",
+        "height": 260,
+        "width": 760
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        980,
+        -200
+      ],
+      "typeVersion": 1,
+      "id": "4d6f9629-348e-4179-a810-f7004872aebe",
+      "name": "Sticky Note5"
     }
   ],
   "pinData": {},
@@ -321,7 +330,13 @@
     },
     "Prep Input Fields": {
       "main": [
-        []
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Webhook": {
@@ -401,7 +416,7 @@
     "executionOrder": "v1",
     "callerPolicy": "workflowsFromSameOwner"
   },
-  "versionId": "7170a937-e1a0-4ba6-b351-17d4f9da81cf",
+  "versionId": "5495255b-e74e-43a3-8df4-465993727bd0",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "9245a7c433255bd81dc6bd6f9239f7124f97dc5aa147fd7f90078f25cf84d7da"
